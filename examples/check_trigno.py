@@ -19,36 +19,21 @@ except ImportError:
     import sys
     sys.path.insert(0, '..')
     import pytrigno
-
-
-def check_emg(host):
-    dev = pytrigno.TrignoEMG(channel_range=(0, 0), samples_per_read=270,
-                             host=host)
-
-    # test single-channel
-    dev.start()
-    for i in range(4):
-        data = dev.read()
-        assert data.shape == (1, 270)
-    dev.stop()
-
-    # test multi-channel
-    dev.set_channel_range((0, 4))
-    dev.start()
-    for i in range(4):
-        data = dev.read()
-        assert data.shape == (5, 270)
-    dev.stop()
-
-
-def check_accel(host):
-    dev = pytrigno.TrignoAccel(channel_range=(0, 2), samples_per_read=10,
+    
+def check_imu(host):
+    dev = pytrigno.TrignoIMU(n_sensors = 16,
                                host=host)
 
     dev.start()
-    for i in range(4):
-        data = dev.read()
-        assert data.shape == (3, 10)
+    print('########### TEST IMU EMG DATA ########### ')
+    for i in range(5):
+        print(f'### EMG DATA {i} ###')
+        data = dev.getEMG()
+        print(data)
+
+        print(f'### IMU DATA {i} ###')
+        data = dev.getData()
+        print(data)
     dev.stop()
 
 
@@ -61,6 +46,4 @@ if __name__ == '__main__':
         default='localhost',
         help="IP address of the machine running TCU. Default is localhost.")
     args = parser.parse_args()
-
-    check_emg(args.host)
-    check_accel(args.host)
+    check_imu(args.host)
