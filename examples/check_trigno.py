@@ -26,14 +26,14 @@ def check_imu(host):
 
     dev.start()
     print('########### TEST IMU EMG DATA ########### ')
-    for i in range(5):
+    for i in range(30):
         print(f'### EMG DATA {i} ###')
         data = dev.getEMG()
         print(data)
 
         print(f'### IMU DATA {i} ###')
         data = dev.getData()
-        print(data)
+        #print(data)
     dev.stop()
 
 

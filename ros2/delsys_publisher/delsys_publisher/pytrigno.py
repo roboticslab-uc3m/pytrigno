@@ -187,7 +187,7 @@ class TrignoIMU(_BaseTrignoDaq):
         
         self.n_sensors = n_sensors
 
-        units = 'mV'
+        units = 'V'
 
         self.scaler = 1.
         if units == 'mV':
@@ -209,7 +209,7 @@ class TrignoIMU(_BaseTrignoDaq):
             Data read from the device. Each channel is a row and each column
             is a point in time.
         """
-        data = super(TrignoIMU, self).read(samples = 7, is_emg = True, n_channels = 1)
+        data = super(TrignoIMU, self).read(samples = 1, is_emg = True, n_channels = 1)
         #data = data[self.channel_range[0]:self.channel_range[1]+1, :]
         return self.scaler * data
     
