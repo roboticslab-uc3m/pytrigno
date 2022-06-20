@@ -103,7 +103,6 @@ class _BaseTrignoDaq(object):
         data_socket = self._data_socket
         if is_emg:
             data_socket = self._emg_socket
-        print(data_socket)
         l_des = samples * self._min_recv_size * n_channels
         l = 0
         packet = bytes()
@@ -209,7 +208,7 @@ class TrignoIMU(_BaseTrignoDaq):
             Data read from the device. Each channel is a row and each column
             is a point in time.
         """
-        data = super(TrignoIMU, self).read(samples = 7, is_emg = True, n_channels = 1)
+        data = super(TrignoIMU, self).read(samples = 1, is_emg = True, n_channels = 1)
         #data = data[self.channel_range[0]:self.channel_range[1]+1, :]
         return self.scaler * data
     
@@ -226,6 +225,6 @@ class TrignoIMU(_BaseTrignoDaq):
             Data read from the device. Each channel is a row and each column
             is a point in time.
         """
-        data = super(TrignoIMU, self).read(samples = 1, is_emg = False, n_channels = 6)
+        data = super(TrignoIMU, self).read(samples = 1, is_emg = False, n_channels = 9)
         #data = data[self.channel_range[0]:self.channel_range[1]+1, :]
         return data

@@ -26,25 +26,25 @@ class DelsysPublisher(Node):
         super().__init__('delsys_publisher')
         self.publisher_ = self.create_publisher(DelsysIMU, 'delsys_imu_values', 100)
         timer_period = 0.1  # seconds
-        self.timer = self.create_timer(timer_period, self.timer_callback)
-        self.i = 0
-        self.trigno = pytrigno.TrignoIMU(n_sensors = 6, host='172.31.1.73',
+        #self.timer = self.create_timer(timer_period, self.timer_callback)
+        self.trigno = pytrigno.TrignoIMU(n_sensors = 16, host='172.31.1.73',
                  cmd_port=50040, emg_port=50043, data_port=50044, timeout=10)
         self.trigno.start()
 
     
-    def timer_callback(self):
+    def publish_data(self):
         ### Read the sensors data
-        data = self.trigno.getData().squeeze()
-        # Publish temperatures array
+        data = self.trigno.getEMG()
+        data = np.mean(data, axis = 1)
         imuData = DelsysIMU()
-        imuData.emg = self.trigno.getEMG().squeeze()
-        imuData.acc_x = data[[i for i in range(0, 36, 6)]]
-        imuData.acc_y = data[[i for i in range(1, 36, 6)]]
-        imuData.acc_z = data[[i for i in range(2, 36, 6)]]
-        imuData.gyro_x = data[[i for i in range(3, 36, 6)]]
-        imuData.gyro_y = data[[i for i in range(4, 36, 6)]]
-        imuData.gyro_z = data[[i for i in range(5, 36, 6)]]
+        imuData.emg = data
+        data = self.trigno.getData().squeeze()
+        imuData.acc_x = data[[i for i in range(0, 144, 9)]]
+        imuData.acc_y = data[[i for i in range(1, 144, 9)]]
+        imuData.acc_z = data[[i for i in range(2, 144, 9)]]
+        imuData.gyro_x = data[[i for i in range(3, 144, 9)]]
+        imuData.gyro_y = data[[i for i in range(4, 144, 9)]]
+        imuData.gyro_z = data[[i for i in range(5, 144, 9)]]
 
         ### Publish data
         self.get_logger().info(f'Publishing: {imuData}')
@@ -56,7 +56,8 @@ def main(args=None):
 
     publisher = DelsysPublisher()
 
-    rclpy.spin(publisher)
+    while rclpy.ok():
+        publisher.publish_data()
 
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically

@@ -100,10 +100,11 @@ class _BaseTrignoDaq(object):
             Data read from the device. Each channel is a row and each column
             is a point in time.
         """
-        data_socket = self._data_socket
         if is_emg:
             data_socket = self._emg_socket
-        print(data_socket)
+        else:
+            data_socket = self._data_socket
+
         l_des = samples * self._min_recv_size * n_channels
         l = 0
         packet = bytes()
@@ -117,7 +118,7 @@ class _BaseTrignoDaq(object):
             l = len(packet)
 
         data = numpy.asarray(
-            struct.unpack('<'+'f'*self.total_sensors * n_channels * samples, packet))
+            struct.unpack('>'+'f'*self.total_sensors * n_channels * samples, packet))
         data = numpy.transpose(data.reshape((-1, self.total_sensors * n_channels)))
 
         return data
@@ -196,7 +197,7 @@ class TrignoIMU(_BaseTrignoDaq):
             # max range of EMG data is 11 mV
             self.scaler = 1 / 0.011
 
-    def getEMG(self):
+    def getEMG(self, samples = 15):
         """
         Request a sample of EMG data from the device.
 
@@ -213,7 +214,7 @@ class TrignoIMU(_BaseTrignoDaq):
         #data = data[self.channel_range[0]:self.channel_range[1]+1, :]
         return self.scaler * data
     
-    def getData(self):
+    def getData(self, samples = 1):
         """
         Request a sample of IMU data (acc and gyro) from the device.
 
@@ -226,6 +227,6 @@ class TrignoIMU(_BaseTrignoDaq):
             Data read from the device. Each channel is a row and each column
             is a point in time.
         """
-        data = super(TrignoIMU, self).read(samples = 1, is_emg = False, n_channels = 6)
+        data = super(TrignoIMU, self).read(samples = 1, is_emg = False, n_channels = 9)
         #data = data[self.channel_range[0]:self.channel_range[1]+1, :]
         return data

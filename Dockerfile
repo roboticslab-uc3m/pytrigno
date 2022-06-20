@@ -14,7 +14,7 @@ WORKDIR /home/dev_ws/ros2
 
 RUN pip install --no-cache-dir -r ../requirements.txt
 
-#RUN source /opt/ros/foxy/setup.bash && colcon build --symlink-install
+#RUN source /opt/ros/foxy/setup.bash && colcon build && source /home/dev_ws/ros2/install/setup.bash
 
 # RUN echo "source /home/dev_ws/ros2/install/setup.bash" >> /home/.bashrc
 # RUN echo "export AMENT_PREFIX_PATH=$AMENT_PREFIX_PATH" 

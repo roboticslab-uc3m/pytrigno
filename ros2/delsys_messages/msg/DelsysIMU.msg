@@ -1,7 +1,7 @@
-float64[6] emg
-float64[6] acc_x
-float64[6] acc_y
-float64[6] acc_z
-float64[6] gyro_x
-float64[6] gyro_y
-float64[6] gyro_z
+float64[16] emg
+float64[16] acc_x
+float64[16] acc_y
+float64[16] acc_z
+float64[16] gyro_x
+float64[16] gyro_y
+float64[16] gyro_z

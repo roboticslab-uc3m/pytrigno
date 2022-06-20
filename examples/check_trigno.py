@@ -12,6 +12,7 @@ Use `-h` or `--help` for options.
 """
 
 import argparse
+import time
 
 try:
     import pytrigno
@@ -28,12 +29,39 @@ def check_imu(host):
     print('########### TEST IMU EMG DATA ########### ')
     for i in range(30):
         print(f'### EMG DATA {i} ###')
-        data = dev.getEMG()
+        data = dev.getEMG().squeeze()
+
+        print('### EMG ###')
         print(data)
+        print()
 
         print(f'### IMU DATA {i} ###')
-        data = dev.getData()
-        #print(data)
+        data = dev.getData().squeeze()
+        print(data)
+        print('### Acc X ###')
+        print(data[[i for i in range(0, 144, 9)]])
+        print()
+
+        print('### Acc Y ###')
+        print(data[[i for i in range(1, 144, 9)]])
+        print()
+
+        print('### Acc Z ###')
+        print(data[[i for i in range(2, 144, 9)]])
+        print()
+
+        print('### Gyro X ###')
+        print(data[[i for i in range(3, 144, 9)]])
+        print()
+
+        print('### Gyro Y ###')
+        print(data[[i for i in range(4, 144, 9)]])
+
+        print()
+        print('### Gyro Z ###')
+        print(data[[i for i in range(5, 144, 9)]])
+        print()
+
     dev.stop()
 
 
