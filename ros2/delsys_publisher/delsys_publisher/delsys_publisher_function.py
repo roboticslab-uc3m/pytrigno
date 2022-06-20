@@ -1,12 +1,10 @@
 import os
-import pathlib
-import time
-
 import numpy as np
 
 import rclpy
 from rclpy.node import Node
 from delsys_messages.msg import DelsysIMU
+from delsys_messages.msg import DelsysEMG
 
 try:
     import pytrigno
@@ -24,31 +22,43 @@ class DelsysPublisher(Node):
 
     def __init__(self):
         super().__init__('delsys_publisher')
-        self.publisher_ = self.create_publisher(DelsysIMU, 'delsys_imu_values', 100)
-        timer_period = 0.1  # seconds
+        self.publisher_imu_ = self.create_publisher(DelsysIMU, 'delsys_imu_values', 100)
+        self.publisher_emg_ = self.create_publisher(DelsysEMG, 'delsys_emg_values', 100)
+
         #self.timer = self.create_timer(timer_period, self.timer_callback)
         self.trigno = pytrigno.TrignoIMU(n_sensors = 16, host='172.31.1.73',
                  cmd_port=50040, emg_port=50043, data_port=50044, timeout=10)
         self.trigno.start()
 
     
-    def publish_data(self):
+    def publish_emg(self):
         ### Read the sensors data
         data = self.trigno.getEMG()
         data = np.mean(data, axis = 1)
-        imuData = DelsysIMU()
-        imuData.emg = data
+        emgData = DelsysEMG()
+        emgData.emg = data
+
+        ### Publish data
+        self.get_logger().info(f'Publishing: {emgData}')
+        self.publisher_emg_.publish(emgData)
+
+    def publish_imu(self):
+        N_CHANNELS = 9 # Number of channels is 9 according to official documentationç
+        N_SENSORS = self.trigno.total_sensors
+        TOTAL_CHANNELS = N_CHANNELS * N_SENSORS
         data = self.trigno.getData().squeeze()
-        imuData.acc_x = data[[i for i in range(0, 144, 9)]]
-        imuData.acc_y = data[[i for i in range(1, 144, 9)]]
-        imuData.acc_z = data[[i for i in range(2, 144, 9)]]
-        imuData.gyro_x = data[[i for i in range(3, 144, 9)]]
-        imuData.gyro_y = data[[i for i in range(4, 144, 9)]]
-        imuData.gyro_z = data[[i for i in range(5, 144, 9)]]
+        imuData = DelsysIMU()
+
+        imuData.acc_x = data[[i for i in range(0, TOTAL_CHANNELS, N_CHANNELS)]]
+        imuData.acc_y = data[[i for i in range(1, TOTAL_CHANNELS, N_CHANNELS)]]
+        imuData.acc_z = data[[i for i in range(2, TOTAL_CHANNELS, N_CHANNELS)]]
+        imuData.gyro_x = data[[i for i in range(3, TOTAL_CHANNELS, N_CHANNELS)]]
+        imuData.gyro_y = data[[i for i in range(4, TOTAL_CHANNELS, N_CHANNELS)]]
+        imuData.gyro_z = data[[i for i in range(5, TOTAL_CHANNELS, N_CHANNELS)]]
 
         ### Publish data
         self.get_logger().info(f'Publishing: {imuData}')
-        self.publisher_.publish(imuData)
+        self.publisher_imu_.publish(imuData)
 
 
 def main(args=None):
@@ -57,7 +67,8 @@ def main(args=None):
     publisher = DelsysPublisher()
 
     while rclpy.ok():
-        publisher.publish_data()
+        publisher.publish_emg()
+        publisher.publish_imu()
 
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically

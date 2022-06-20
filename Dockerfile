@@ -1,4 +1,5 @@
 FROM osrf/ros:foxy-desktop
+SHELL ["/bin/bash", "-c"]
 # Dockerfile info
 LABEL maintainer="sesantam@pa.uc3m.es"
 LABEL version="0.1"
@@ -14,9 +15,6 @@ WORKDIR /home/dev_ws/ros2
 
 RUN pip install --no-cache-dir -r ../requirements.txt
 
-#RUN source /opt/ros/foxy/setup.bash && colcon build && source /home/dev_ws/ros2/install/setup.bash
-
-# RUN echo "source /home/dev_ws/ros2/install/setup.bash" >> /home/.bashrc
-# RUN echo "export AMENT_PREFIX_PATH=$AMENT_PREFIX_PATH" 
-# # :/home/${USER}/dev_ws/src/ros_iiwa_unity_msgs/msg:/home/${USER}/dev_ws/src/ros_iiwa_unity_msgs/action" >> /home/$USER/.bashrc
-# RUN . /home/.bashrc && . /home/$USER/dev_ws/install/setup.bash
+RUN source /opt/ros/foxy/setup.bash && colcon build && source /home/dev_ws/ros2/install/setup.bash
+RUN chmod  +x "../ros_entrypoint.sh"
+CMD ["../ros_entrypoint.sh"]

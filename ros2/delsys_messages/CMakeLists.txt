@@ -9,6 +9,7 @@ find_package(std_msgs REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/DelsysIMU.msg"
+  "msg/DelsysEMG.msg"
   DEPENDENCIES builtin_interfaces geometry_msgs std_msgs
  )
 

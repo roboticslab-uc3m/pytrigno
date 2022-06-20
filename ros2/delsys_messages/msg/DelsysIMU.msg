@@ -1,4 +1,3 @@
-float64[16] emg
 float64[16] acc_x
 float64[16] acc_y
 float64[16] acc_z
