@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e
-source /opt/ros/foxy/setup.bash 
+source /opt/ros/humble/setup.bash
 colcon build
 source /home/dev_ws/ros2/install/setup.bash
 
