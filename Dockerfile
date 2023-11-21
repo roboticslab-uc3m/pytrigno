@@ -1,4 +1,4 @@
-FROM osrf/ros:foxy-desktop
+FROM osrf/ros:humble-desktop
 SHELL ["/bin/bash", "-c"]
 # Dockerfile info
 LABEL maintainer="sesantam@pa.uc3m.es"
@@ -15,6 +15,6 @@ WORKDIR /home/dev_ws/ros2
 
 RUN pip install --no-cache-dir -r ../requirements.txt
 
-RUN source /opt/ros/foxy/setup.bash && colcon build && source /home/dev_ws/ros2/install/setup.bash
+RUN source /opt/ros/humble/setup.bash && colcon build && source /home/dev_ws/ros2/install/setup.bash
 RUN chmod  +x "../ros_entrypoint.sh"
 CMD ["../ros_entrypoint.sh"]
