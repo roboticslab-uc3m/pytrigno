@@ -20,13 +20,15 @@ os.chdir(dname)
 
 class DelsysPublisher(Node):
 
-    def __init__(self):
+    def __init__(self, host_ip):
         super().__init__('delsys_publisher')
         self.publisher_imu_ = self.create_publisher(DelsysIMU, 'delsys_imu_values', 100)
         self.publisher_emg_ = self.create_publisher(DelsysEMG, 'delsys_emg_values', 100)
 
+        self.get_logger().info(f'host_ip: {host_ip}')
+
         #self.timer = self.create_timer(timer_period, self.timer_callback)
-        self.trigno = pytrigno.TrignoIMU(n_sensors = 16, host='172.31.1.73',
+        self.trigno = pytrigno.TrignoIMU(n_sensors = 16, host = host_ip,
                  cmd_port=50040, emg_port=50043, data_port=50044, timeout=10)
         self.trigno.start()
 
@@ -64,7 +66,7 @@ class DelsysPublisher(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    publisher = DelsysPublisher()
+    publisher = DelsysPublisher(os.getenv('HOST_IP', '127.0.0.1'))
 
     while rclpy.ok():
         publisher.publish_emg()
