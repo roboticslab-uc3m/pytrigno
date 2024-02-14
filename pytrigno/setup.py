@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
-# Get requirements from requirements.txt
-with open('requirements.txt') as f:
-    INSTALL_REQUIRES = f.read().splitlines()
+INSTALL_REQUIRES = [
+    'numpy',
+]
 
 setup(
     name='pytrigno',
