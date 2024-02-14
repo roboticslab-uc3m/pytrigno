@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(delsys_messages)
+project(ros2_pytrigno_msgs)
 
 # find dependencies
 find_package(rosidl_default_generators REQUIRED)
@@ -11,7 +11,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/DelsysIMU.msg"
   "msg/DelsysEMG.msg"
   DEPENDENCIES builtin_interfaces geometry_msgs std_msgs
- )
+)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
