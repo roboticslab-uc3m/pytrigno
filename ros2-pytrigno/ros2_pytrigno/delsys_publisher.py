@@ -4,8 +4,8 @@ import numpy as np
 import rclpy
 from rclpy.node import Node
 
-from ros2_pytrigno_msgs.msg import DelsysIMU
-from ros2_pytrigno_msgs.msg import DelsysEMG
+from roboasset_msgs.msg import DelsysIMU
+from roboasset_msgs.msg import DelsysEMG
 
 from pytrigno.imu_reader import TrignoIMU
 
