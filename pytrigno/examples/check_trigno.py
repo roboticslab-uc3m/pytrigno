@@ -12,18 +12,14 @@ Use `-h` or `--help` for options.
 """
 
 import argparse
-import time
+from pytrigno.imu_reader import TrignoIMU
 
-try:
-    import pytrigno
-except ImportError:
-    import sys
-    sys.path.insert(0, '..')
-    import pytrigno
-    
+
 def check_imu(host):
-    dev = pytrigno.TrignoIMU(n_sensors = 16,
-                               host=host)
+    dev = TrignoIMU(
+        n_sensors = 16,
+        host=host
+    )
 
     dev.start()
     print('########### TEST IMU EMG DATA ########### ')

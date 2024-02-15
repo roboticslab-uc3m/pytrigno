@@ -3,16 +3,11 @@ import numpy as np
 
 import rclpy
 from rclpy.node import Node
-from delsys_messages.msg import DelsysIMU
-from delsys_messages.msg import DelsysEMG
 
-try:
-    import pytrigno
-except ImportError:
-    import sys
-    sys.path.insert(0, '..')
-    import pytrigno
+from roboasset_msgs.msg import DelsysIMU
+from roboasset_msgs.msg import DelsysEMG
 
+from pytrigno.imu_reader import TrignoIMU
 
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
@@ -28,11 +23,17 @@ class DelsysPublisher(Node):
         self.get_logger().info(f'host_ip: {host_ip}')
 
         #self.timer = self.create_timer(timer_period, self.timer_callback)
-        self.trigno = pytrigno.TrignoIMU(n_sensors = 16, host = host_ip,
-                 cmd_port=50040, emg_port=50043, data_port=50044, timeout=10)
+        self.trigno = TrignoIMU(
+            n_sensors = 16,
+            host = host_ip,
+            cmd_port=50040,
+            emg_port=50043,
+            data_port=50044,
+            timeout=10
+        )
         self.trigno.start()
 
-    
+
     def publish_emg(self):
         ### Read the sensors data
         data = self.trigno.getEMG()

@@ -1,4 +1,8 @@
-from setuptools import setup
+from setuptools import setup, find_packages
+
+INSTALL_REQUIRES = [
+    'numpy',
+]
 
 setup(
     name='pytrigno',
@@ -15,10 +19,12 @@ setup(
     ],
     keywords='electromyography',
 
+    packages=find_packages(),
+    install_requires=INSTALL_REQUIRES,
+
     url='https://github.com/ucdrascal/pytrigno',
     author='Kenneth Lyons',
     author_email='ixjlyons@gmail.com',
     license='MIT',
 
-    py_modules=['pytrigno']
 )

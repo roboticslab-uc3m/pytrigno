@@ -1,7 +1,7 @@
-FROM osrf/ros:humble-desktop
+FROM osrf/ros:humble-base
 SHELL ["/bin/bash", "-c"]
 # Dockerfile info
-LABEL maintainer="sesantam@pa.uc3m.es"
+LABEL maintainer=""
 LABEL version="0.1"
 LABEL description="Docker image to run ros2 publisher."
 

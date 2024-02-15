@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = 'delsys_publisher'
+package_name = 'ros2_pytrigno'
 
 setup(
     name=package_name,
@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'delsys_pub = delsys_publisher.delsys_publisher_function:main',
+            'delsys_publisher = ros2_pytrigno.delsys_publisher:main',
         ],
     },
 )
