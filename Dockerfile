@@ -1,4 +1,4 @@
-FROM osrf/ros:humble-base
+FROM ros:humble-ros-base
 SHELL ["/bin/bash", "-c"]
 # Dockerfile info
 LABEL maintainer=""
@@ -11,10 +11,10 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && apt-get install -y \
     python3-pip
 COPY . /home/dev_ws/
-WORKDIR /home/dev_ws/ros2
+WORKDIR /home/dev_ws/ros2-pytrigno
 
-RUN pip install --no-cache-dir -r ../requirements.txt
+RUN pip install --no-cache-dir -r ../pytrigno/requirements.txt
 
-RUN source /opt/ros/humble/setup.bash && colcon build && source /home/dev_ws/ros2/install/setup.bash
+RUN source /opt/ros/humble/setup.bash && colcon build && source /home/dev_ws/ros2-pytrigno/install/setup.bash
 RUN chmod  +x "../ros_entrypoint.sh"
 CMD ["../ros_entrypoint.sh"]
